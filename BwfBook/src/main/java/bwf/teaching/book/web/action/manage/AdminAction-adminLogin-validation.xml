@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE validators PUBLIC
+  		"-//Apache Struts//XWork Validator 1.0.3//EN"
+  		"http://struts.apache.org/dtds/xwork-validator-1.0.3.dtd">
+<validators>
+	<field name="loginId">
+		<field-validator type="requiredstring">
+			<message>账号不能为空！</message>
+		</field-validator>
+		<field-validator type="regex">
+			<param name="regex"><![CDATA[\w{6,15}]]></param>
+			<message>账号是由6到15位的，字母、数字或者下划线组成</message>
+		</field-validator>
+	</field>
+	<field name="loginPsw">
+		<field-validator type="requiredstring">
+			<message>密码不能为空！</message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="minLength">6</param>
+			<param name="maxLength">18</param>
+			<message>密码的长度应该在${minLength}到${maxLength}之间</message>
+		</field-validator>
+	</field>
+</validators>

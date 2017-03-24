@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+    "http://struts.apache.org/dtds/struts-2.5.dtd">
+<struts>
+
+	<constant name="struts.multipart.maxSize" value="102400000" />
+	
+	<package name="manage" extends="json-default" namespace="/manage">
+	
+		<interceptors>
+			<interceptor name="manageAuthority" class="bwf.teaching.book.web.interceptor.ManageAuthorityInterceptor">
+				<param name="excludeMethods">loginForm,loginCheck</param>
+			</interceptor>
+			<interceptor-stack name="manageDefaultStack">
+				<interceptor-ref name="manageAuthority" />				
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+		</interceptors>
+	
+		<default-interceptor-ref name="manageDefaultStack" />
+		
+		<global-results>
+			<result name="login" type="chain">adminLoginForm</result>
+		</global-results>
+	
+		<!-- Admin相关的请求处理 -->
+		<action name="adminLoginForm" class="adAction" method="loginForm">
+			<result>/WEB-INF/jsp/manage/admin-login.jsp</result>
+		</action>
+		<action name="adminLogin" class="adAction" method="loginCheck">
+			<result type="redirectAction">adminHome</result>
+			<result name="input" type="chain">adminLoginForm</result>
+		</action>
+		<action name="adminHome" class="adAction" method="home">			
+			<result>/WEB-INF/jsp/manage/admin-home.jsp</result>
+		</action>
+		
+		<action name="downloadTXL" class="downloadTXLAction">
+			<result type="stream">
+				<param name="inputName">txlFile</param>
+				<param name="contentDisposition">attachment; filename=${fn}</param>
+			</result>
+		</action>
+		
+		
+		<!-- Book相关的请求处理 -->
+		<action name="bookMgr" class="bookAction" method="mgr">
+			<result>/WEB-INF/jsp/manage/book-mgr.jsp</result>
+		</action>
+		
+		<!-- 获取分页图书信息数据的ajax处理 -->
+		<action name="bookList" class="bookAction" method="list">
+			<param name="pageSize">7</param>
+			<result type="json">
+				<param name="root">listResult</param>
+				<param name="contentType">text/html;charset=utf-8</param>
+			</result>
+		</action>
+		
+		<!-- 验证图书名是否已经存在的ajax处理 -->
+		<action name="bookTitleCheck" class="bookAction" method="checkTitle">			
+			<result type="json">
+				<param name="root">exists</param>
+			</result>
+		</action>
+		
+		<!-- 录入新图书信息的表单提交请求 -->
+		<action name="bookSave" class="bookAction" method="save">
+			<result name="input">/WEB-INF/jsp/manage/book-mgr.jsp</result>
+			<interceptor-ref name="manageDefaultStack">
+				<param name="fileUpload.allowedTypes">image/jpeg, image/gif, image/png</param>
+				<param name="fileUpload.maximumSize">1024000</param>
+			</interceptor-ref>
+		</action>
+		
+	</package>
+	
+</struts>
