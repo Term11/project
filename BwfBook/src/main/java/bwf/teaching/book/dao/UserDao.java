@@ -11,7 +11,7 @@ public interface UserDao {
 	 * @param user
 	 */
 	void add(User user);
-	
+
 	/**
 	 * 分页查询用户信息
 	 * @param pageCurr 第几页
@@ -19,5 +19,13 @@ public interface UserDao {
 	 * @return
 	 */
 	List<User> getUsers(int pageCurr, int pageSize);
+
+	/**
+	 * 根据登录账号查询用户信息
+	 * @param loginId
+	 * @return
+	 */
+	User getUserByLoginId(String loginId);
+
 
 }
