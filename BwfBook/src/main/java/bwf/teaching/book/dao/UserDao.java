@@ -9,5 +9,7 @@ public interface UserDao {
 	 * @param user
 	 */
 	void add(User user);
+	
+	User getUserByLoginId(String loginId);
 
 }
